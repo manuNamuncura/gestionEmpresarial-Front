@@ -18,4 +18,8 @@ export class EmpleadoService {
     saveEmpleado(empleado: Partial<Empleado>): Observable<Empleado> {
         return this.http.post<Empleado>(this.apiUrl, empleado);
     }
+
+    deleteEmpleado(id: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    }
 }

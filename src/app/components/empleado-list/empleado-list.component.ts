@@ -37,5 +37,14 @@ export class EmpleadoListComponent implements OnInit {
     });
   }
   
+  eliminarEmpleado(id: number): void {
+    if (confirm('¿Estás seguro de que deseas eliminar este empleado?')) {
+      this.empleadoService.deleteEmpleado(id).subscribe({
+        next: () => {
+          this.loadEmpleados();
+        }
+      })
+    }
+  }
     
 }

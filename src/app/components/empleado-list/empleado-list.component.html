@@ -77,7 +77,7 @@
               >
                 Editar
               </button>
-              <button class="text-red-600 hover:text-red-900 font-medium focus:underline">
+              <button (click)="eliminarEmpleado(emp.id)" class="text-red-600 hover:text-red-900 font-medium focus:underline" [aria-label]="'Eliminar empleado ' + emp.nombre">
                 Eliminar
               </button>
             </td>
