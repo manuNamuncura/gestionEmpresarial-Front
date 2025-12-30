@@ -10,7 +10,6 @@ import { Empleado } from '../../models/empleado.model';
   imports: [CommonModule],
   templateUrl: './empleado-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrl: './empleado-list.css',
 })
 export class EmpleadoListComponent implements OnInit {
   

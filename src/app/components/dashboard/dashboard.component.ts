@@ -5,7 +5,6 @@ import { EmpleadoListComponent } from '../empleado-list/empleado-list.component'
   selector: 'app-dashboard',
   imports: [EmpleadoListComponent],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.css',
 })
 export class DashboardComponent {
 
