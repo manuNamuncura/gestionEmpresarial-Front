@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { EmpleadoService } from './empleado.service';
-import { map, Observable } from 'rxjs';
 import { Empleado } from '../../models/empleado.model';
+import { EmpleadoFormComponent } from './empleado-form.component';
 
 @Component({
   selector: 'app-empleado-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, EmpleadoFormComponent],
   templateUrl: './empleado-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -17,6 +17,11 @@ export class EmpleadoListComponent implements OnInit {
 
   empleados = signal<Empleado[]>([]);
   isLoading = signal<boolean>(true);
+  showModal = signal(false);
+
+  toggleModal() {
+    this.showModal.update(v => !v);
+  }
 
   ngOnInit(): void {
     this.loadEmpleados();
