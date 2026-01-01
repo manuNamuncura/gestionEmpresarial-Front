@@ -19,6 +19,7 @@ export class EmpleadoListComponent implements OnInit {
   empleados = signal<Empleado[]>([]);
   isLoading = signal<boolean>(true);
   showModal = signal(false);
+  empleadoSeleccionado = signal<Empleado | null>(null);
   
   private searchSubject = new Subject<string>();
 
@@ -48,6 +49,9 @@ export class EmpleadoListComponent implements OnInit {
   }
 
   toggleModal() {
+    if (this.showModal()) {
+      this.empleadoSeleccionado.set(null);
+    }
     this.showModal.update(v => !v);
   }
   
@@ -62,5 +66,10 @@ export class EmpleadoListComponent implements OnInit {
   onSearch(event: Event) {
     const element = event.target as HTMLInputElement;
     this.searchSubject.next(element.value);
+  }
+
+  abrirEdicion(emp: Empleado) {
+    this.empleadoSeleccionado.set(emp);
+    this.showModal.set(true);
   }
 }

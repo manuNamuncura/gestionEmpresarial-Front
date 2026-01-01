@@ -64,9 +64,19 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
-                  <button class="text-indigo-600 hover:text-indigo-900 font-semibold mr-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button 
+                  (click)="abrirEdicion(emp)"
+                  class="text-indigo-600 hover:text-indigo-900 font-semibold mr-4 opacity-0 group-hover:opacity-100 transition-opacity">
                     Editar
                   </button>
+                  @if (showModal()) {
+                    <app-empleado-form
+                      [empleadoAEditar]="empleadoSeleccionado()"
+                      (closeModal)="toggleModal()"
+                      (empleadoCreado)="loadEmpleados()"
+                    >
+                    </app-empleado-form>
+                  }
                   <button (click)="eliminarEmpleado(emp.id)" class="text-red-600 hover:text-red-900 font-semibold">
                     Eliminar
                   </button>

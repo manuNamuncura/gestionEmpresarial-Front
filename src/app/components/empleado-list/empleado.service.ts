@@ -25,4 +25,8 @@ export class EmpleadoService {
   deleteEmpleado(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  updateEmpleado(id: number, empleado: Partial<Empleado>): Observable<Empleado> {
+    return this.http.put<Empleado>(`${this.apiUrl}/${id}`, empleado);
+  }
 }

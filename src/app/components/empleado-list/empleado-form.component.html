@@ -6,13 +6,16 @@
 >
   <div class="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 transform transition-all">
     <div class="flex justify-between items-center mb-6">
-      <h2 id="modal-title" class="text-xl font-bold text-gray-800">Registrar Nuevo Empleado</h2>
+      <h2 id="modal-title" class="text-xl font-bold text-gray-800">
+        {{ empleadoAEditar() ? 'Editar Empleado' : 'Registrar Nuevo Empleado' }}
+      </h2>
+
       <button
-        (click)="closeModal.emit()"
-        class="text-gray-400 hover:text-gray-600"
-        aria-label="Cerrar modal"
+        type="submit"
+        [disabled]="empleadoForm.invalid || isSubmitting()"
+        class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
       >
-        ✕
+        {{ isSubmitting() ? 'Procesando...' : empleadoAEditar() ? 'Actualizar' : 'Guardar' }}
       </button>
     </div>
 

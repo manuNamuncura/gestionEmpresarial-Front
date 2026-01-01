@@ -1,15 +1,15 @@
-import { Component, inject, output, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, output, signal, ChangeDetectionStrategy, input, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { EmpleadoService } from './empleado.service';
-
+import { Empleado } from '../../models/empleado.model';
 
 @Component({
   selector: 'app-empleado-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './empleado-form.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmpleadoFormComponent {
   private readonly fb = inject(FormBuilder);
@@ -18,42 +18,63 @@ export class EmpleadoFormComponent {
   // Evento para avisar al padre que debe refrescar la lista
   empleadoCreado = output<void>();
   closeModal = output<void>();
-
+  
+  empleadoAEditar = input<Empleado | null>(null);
   isSubmitting = signal(false);
+
+  constructor() {
+    effect(() => {
+      const emp = this.empleadoAEditar();
+      if (emp) {
+        this.empleadoForm.patchValue({
+          nombre: emp.nombre,
+          email: emp.email,
+          telefono: emp.telefono,
+          salario: emp.salario as any,
+          departamentoId: emp.departamento?.id as any,
+          fechaIngreso: emp.fechaIngreso
+        })
+      }
+    })
+  }
 
   // Formulario con validaciones WCAG y tipado
   empleadoForm = this.fb.group({
-  nombre: ['', [Validators.required]],
-  email: ['', [Validators.required, Validators.email]],
-  telefono: ['', [Validators.required]], // Ahora es obligatorio
-  salario: [null, [Validators.required]],
-  departamentoId: [null, [Validators.required]],
-  fechaIngreso: [new Date().toISOString().split('T')[0], [Validators.required]] // Fecha actual por defecto
-});
+    nombre: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
+    telefono: ['', [Validators.required]], // Ahora es obligatorio
+    salario: [null, [Validators.required]],
+    departamentoId: [null, [Validators.required]],
+    fechaIngreso: [new Date().toISOString().split('T')[0], [Validators.required]], // Fecha actual por defecto
+  });
 
   onSubmit(): void {
   if (this.empleadoForm.invalid) return;
   this.isSubmitting.set(true);
+
+  const val = this.empleadoForm.getRawValue();
   
-  const rawValue = this.empleadoForm.getRawValue();
-  
-  const empleadoParaGuardar = {
-    nombre: rawValue.nombre,
-    email: rawValue.email,
-    telefono: rawValue.telefono,
-    salario: rawValue.salario,
-    fechaIngreso: rawValue.fechaIngreso, // Enviamos la fecha
-    departamento: { id: rawValue.departamentoId }
+  // Construimos el payload exacto que espera el Backend
+  const payload = { 
+    ...val, 
+    departamento: { id: val.departamentoId } 
   };
 
-  this.empleadoService.saveEmpleado(empleadoParaGuardar as any).subscribe({
+  const id = this.empleadoAEditar()?.id;
+
+  // Lógica de decisión: ¿Actualizar o Crear?
+  const request = id
+    ? this.empleadoService.updateEmpleado(id, payload as any)
+    : this.empleadoService.saveEmpleado(payload as any);
+  
+  request.subscribe({
     next: () => {
       this.empleadoCreado.emit();
       this.isSubmitting.set(false);
       this.closeModal.emit();
     },
     error: (err) => {
-      console.error('Error de validación en Backend:', err);
+      console.error('Error en la operación:', err);
       this.isSubmitting.set(false);
     }
   });
