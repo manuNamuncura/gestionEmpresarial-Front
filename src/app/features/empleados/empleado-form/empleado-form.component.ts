@@ -1,8 +1,8 @@
 import { Component, inject, output, signal, ChangeDetectionStrategy, input, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { EmpleadoService } from './empleado.service';
-import { Empleado } from '../../models/empleado.model';
+import { EmpleadoService } from '../empleado.service';
+import { Empleado } from '../../../models/empleado.model';
 
 @Component({
   selector: 'app-empleado-form',

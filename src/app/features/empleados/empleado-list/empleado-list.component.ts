@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { EmpleadoService } from './empleado.service';
-import { Empleado } from '../../models/empleado.model';
-import { EmpleadoFormComponent } from './empleado-form.component';
+import { EmpleadoService } from '../empleado.service';
+import { Empleado } from '../../../models/empleado.model';
+import { EmpleadoFormComponent } from '../empleado-form/empleado-form.component';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
