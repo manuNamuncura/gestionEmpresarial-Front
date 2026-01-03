@@ -1,12 +1,13 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
+import { ToastComponent } from "../shared/components/toast/toast.component";
 
 
 @Component({
     selector: 'app-layout',
     standalone: true,
-    imports: [CommonModule, RouterOutlet],
+    imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, ToastComponent],
     templateUrl: './layout.component.html',
     styles: [`
         :host { display: block; }

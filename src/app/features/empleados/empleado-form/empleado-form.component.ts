@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { EmpleadoService } from '../empleado.service';
 import { Empleado } from '../../../models/empleado.model';
+import { ToastService } from '../../../shared/components/toast.service';
 
 @Component({
   selector: 'app-empleado-form',
@@ -14,6 +15,7 @@ import { Empleado } from '../../../models/empleado.model';
 export class EmpleadoFormComponent {
   private readonly fb = inject(FormBuilder);
   private readonly empleadoService = inject(EmpleadoService);
+  private readonly toast = inject(ToastService);
 
   // Evento para avisar al padre que debe refrescar la lista
   empleadoCreado = output<void>();
@@ -77,6 +79,15 @@ export class EmpleadoFormComponent {
       console.error('Error en la operación:', err);
       this.isSubmitting.set(false);
     }
+  });
+
+  this.empleadoService.saveEmpleado(payload as any).subscribe({
+    next: () => {
+      this.toast.mostrar('Empleado guardado con exito', 'success');
+      this.empleadoCreado.emit();
+      this.closeModal.emit();
+    },
+    error: () => this.toast.mostrar('Error al procesar la solicitud', 'error')
   });
 }
 }
